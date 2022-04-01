@@ -4,7 +4,7 @@ This repo aims to investigate the application of the Modigliani-Miller Theorem t
 
 It is organised as follows:
 
-LICENSE
+LICENSE 
 
 README.md: an introduction and overview of the data analysis
 
