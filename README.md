@@ -1,6 +1,6 @@
 # Application of Modigliani-Miller Theorem to the US Economy 
 
-This repo aims to investigate the application of Modigliani-Miller Theorem to the history of the US economy and how much the US economy follows this theory. Modigliani-Miller theorem is a financial economics theory that is usually applied to individual companies to describe the capital structures. However, in this repo, I apply the Modigliani-Miller theorem to a country to examine the similarity and differences in the capital structure of the government and inidividual companies, and how Modigliani-Miller theorem can be used to explain the history of the US economy. 
+This repo aims to investigate the application of the Modigliani-Miller Theorem to the history of the US economy and how much the US economy follows this theory. Modigliani-Miller theorem is a financial economics theory that is usually applied to individual companies to describe capital structures. However, in this repo, I apply the Modigliani-Miller theorem to a country to examine the similarities and differences in the capital structure of the government and individual companies, and how the Modigliani-Miller theorem can be used to explain the history of the US economy. 
 
 It is organised as follows:
 LICENSE
