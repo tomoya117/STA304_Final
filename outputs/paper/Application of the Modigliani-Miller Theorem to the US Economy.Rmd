@@ -3,8 +3,8 @@ title: "Application of the Modigliani-Miller Theorem to the US Economy"
 author: 
   - Tomoya Fujikawa
 thanks: "Code and data are available at: https://github.com/tomoya117/STA304_Final.git"
-date: "`r format(Sys.time(), '%27 %4 %2022')`"
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
+date: "`r format(Sys.time(), '%27/%4/%2022')`"
+abstract: "The Modigliani-Miller Theorem is an economic theory which calculates the value of individual companies in the modern world indepedent of its capital structures. This paper attempts to apply this theory to the US government and its  behaviour by observing and analysing the historical data on the government income and expenditure. After a thorough investigation, it was discovered that the US government has been following the Modigliani-Miller Theorem very closely. Thus, by implementing the result from this paper, it is now possible to anticipate the  future effects of fiscal policies by the US government, which may help companies and investors to hedge risks or seek for more profit.\\par \\textbf{Keywords:} The Modigliani-Miller Theorem, US government, capital structure, investment, fiscal policy, economic shocks"
 output:
   bookdown::pdf_document2
 toc: FALSE
@@ -12,57 +12,17 @@ bibliography: references.bib
 ---
 
 # Introduction
+The Modigliani-Miller Theorem is an economic theory which states that the market value of a company is calculated by the present value of all future cash-flows and that the capital structure of the company is irrelevant. The theory was conceptualized by two economists, Merton Miller and Franco Modigliani in the 1950s which resulted in a significant impact on the corporate finance world [@MM]. It is known as one of the simplest economics frameworks with a few very strong assumptions. The theorem assumes the following three things: securities are fairly priced and there is no arbitrage, there is no tax, transaction nor distress costs, investment cash flows are independent of financing choices, and there is no agency costs or asymmetric information. Due to these assumptions, the value of a company calculated by the Modigliani-Miller Theorem are  slightly different than the actual value in reality. Thus, it is often used as a good benchmark to estimate the value of a company. 
 
-You can and should cross-reference sections and sub-sections. For instance, Section \@ref(data). R Markdown automatically makes the sections lower case and adds a dash to spaces to generate labels, for instance, Section \@ref(first-discussion-point). 
+The question to wonder here is whether the Modigliani-Miller Theorem can be applied to a government instead of a company to estimate the value of the country. In theory, the theorem can be applied to the government too. The Modigliani-Miller Theorem's first proposition states that the value of an unlevered firm is equal to the value of a levered firm, which simply means that the value of any company is equal to the sum of its equity and debt. Moreover, it states that the value of a company is equal to the value of assets the company holds. Thus, by rearranging this formula and applying them to appropriate variables, it is, in theory, possible to apply to the government. This paper is going to assume the government's assets to be tax income, equity to be government spending, and debt to be government debt payment. The assets produce income for the owner and liabilities such as equity and debt result in outflow of cash. Although these variables for the government may not be exactly the same as the variables for the companies, each substitution is reasonable to replicate the structure of the Modigliani-Miller Theorem. 
 
+The policies the US government implements have always had great impacts on the US economy especially during economic shocks. In the past when the Great Recession occurred in 2007 to 2008, the government reacted with a $787 billion spending to stimulate the economy [@GR]. During COVID-19 pandemic and on-going war between Russia and Ukraine, the US government has managed its spending and debt to recover and maintain the economy. Due to these fluctuations in the economy, both consumers and businesses often lose confidence in spending and investing. Thus, the aim of the paper is to investigate whether historical data of the US economy follows the Modigliani-Miller Theorem and potentially use the theorem to estimate the future US economy. The results from this paper can help any investors and companies to make better decisions about their investment. 
 
+The remainder of this paper is: Section \@ref(data) introduces the data and visualizes them using tables and graphs. Section \@ref(model) explains the model used in this paper and how it is derived. Section \@ref(results) explains the results of analysis. Section \@ref(discussion) describes strength and limitations of the data and discusses possible further investigations to improve the analysis. Section \@ref(conclusion) summarizes the analysis and states the conclusion. 
 
 # Data
 
-Our data is of penguins (Figure \@ref(fig:bills)).
-
-```{r bills, fig.cap="Bills of penguins", echo = FALSE}
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
-Talk more about it.
-
-Also bills and their average (Figure \@ref(fig:billssssss)). (Notice how you can change the height and width so they don't take the whole page?)
-
-```{r billssssss, fig.cap="More bills of penguins", echo = FALSE, fig.width=8, fig.height=4}
-
-# This needs to be about the random data tha tI sasmpled?
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = FALSE) +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
-Talk way more about it. 
-
-
-
 # Model
-
-\begin{equation}
-Pr(\theta | y) = \frac{Pr(y | \theta) Pr(\theta)}{Pr(y)}  (\#eq:bayes)
-\end{equation}
-
-Equation \@ref(eq:bayes) seems useful, eh?
-
-Here's a dumb example of how to use some references: In paper we run our analysis in `R` [@citeR]. We also use the `tidyverse` which was written by @thereferencecanbewhatever If we were interested in baseball data then @citeLahman could be useful. 
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
-
 
 # Results
 
@@ -70,25 +30,13 @@ We can use maths by including latex between dollar signs, for instance $\theta$.
 
 ## First discussion point
 
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
-
 ## Second discussion point
 
 ## Third discussion point
 
 ## Weaknesses and next steps
 
-Weaknesses and next steps should also be included.
-
-\newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional details
-
+# Conclusion 
 
 \newpage
 
