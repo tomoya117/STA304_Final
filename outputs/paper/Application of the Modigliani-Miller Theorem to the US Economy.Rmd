@@ -1,46 +1,288 @@
 ---
-title: "Application of the Modigliani-Miller Theorem to the US Economy"
+title: "Application of the Modigliani-Miller Theorem to the Cash Flows of the US Government"
 author: 
   - Tomoya Fujikawa
 thanks: "Code and data are available at: https://github.com/tomoya117/STA304_Final.git"
 date: "`r format(Sys.time(), '%27/%4/%2022')`"
-abstract: "The Modigliani-Miller Theorem is an economic theory which calculates the value of individual companies in the modern world indepedent of its capital structures. This paper attempts to apply this theory to the US government and its  behaviour by observing and analysing the historical data on the government income and expenditure. After a thorough investigation, it was discovered that the US government has been following the Modigliani-Miller Theorem very closely. Thus, by implementing the result from this paper, it is now possible to anticipate the  future effects of fiscal policies by the US government, which may help companies and investors to hedge risks or seek for more profit.\\par \\textbf{Keywords:} The Modigliani-Miller Theorem, US government, capital structure, investment, fiscal policy, economic shocks"
+abstract: "The Modigliani-Miller Theorem is an economic theory which calculates the value of individual companies in the modern world indepedent of its capital structures. This paper attempts to apply this theory to the US government and its behaviour by observing and analysing the historical data on the government income and expenditure. A thorough investigation led to a discovery that the US government has not been following the Modigliani-Miller Theorem due to its investment in wealth funds. Thus, by further investigating the topic and applying it to other countries with no wealth fund investments, it may become possible to anticipate the future effects of fiscal policies in other countries, which may help companies and investors to hedge risks or seek for more profit.\\par \\textbf{Keywords:} The Modigliani-Miller Theorem, US government, capital structure, investment, fiscal policy, economic shocks"
 output:
   bookdown::pdf_document2
 toc: FALSE
 bibliography: references.bib
 ---
 
+```{r setup the packages, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(dplyr)
+library(knitr)
+library(bookdown)
+library(kableExtra)
+library(ggplot2)
+```
+
 # Introduction
-The Modigliani-Miller Theorem is an economic theory which states that the market value of a company is calculated by the present value of all future cash-flows and that the capital structure of the company is irrelevant. The theory was conceptualized by two economists, Merton Miller and Franco Modigliani in the 1950s which resulted in a significant impact on the corporate finance world [@MM]. It is known as one of the simplest economics frameworks with a few very strong assumptions. The theorem assumes the following three things: securities are fairly priced and there is no arbitrage, there is no tax, transaction nor distress costs, investment cash flows are independent of financing choices, and there is no agency costs or asymmetric information. Due to these assumptions, the value of a company calculated by the Modigliani-Miller Theorem are  slightly different than the actual value in reality. Thus, it is often used as a good benchmark to estimate the value of a company. 
+The Modigliani-Miller Theorem is an economic theory which states that the market value of a company is calculated by the present value of all future cash flows and that the capital structure of the company is irrelevant. The theory was conceptualized by two economists, Merton Miller and Franco Modigliani in the 1950s which impacted the corporate finance world significantly[@MM]. It is well-known as one of the simplest economics frameworks with a few very strong assumptions. The theorem assumes the following three things: securities are fairly priced thus no-arbitrage, there is no tax, transaction or distress costs and investment cash flows are independent of financing choices, and there are no agency costs or asymmetric information. Due to these assumptions, the value of a company calculated by the Modigliani-Miller Theorem may be slightly different than the actual value in reality. Thus, it is often used as a good benchmark to estimate the value of a company.
 
-The question to wonder here is whether the Modigliani-Miller Theorem can be applied to a government instead of a company to estimate the value of the country. In theory, the theorem can be applied to the government too. The Modigliani-Miller Theorem's first proposition states that the value of an unlevered firm is equal to the value of a levered firm, which simply means that the value of any company is equal to the sum of its equity and debt. Moreover, it states that the value of a company is equal to the value of assets the company holds. Thus, by rearranging this formula and applying them to appropriate variables, it is, in theory, possible to apply to the government. This paper is going to assume the government's assets to be tax income, equity to be government spending, and debt to be government debt payment. The assets produce income for the owner and liabilities such as equity and debt result in outflow of cash. Although these variables for the government may not be exactly the same as the variables for the companies, each substitution is reasonable to replicate the structure of the Modigliani-Miller Theorem. 
+The question to wonder here is whether the Modigliani-Miller Theorem can be applied to a government instead of a company to estimate the value of the country. In theory, the theorem can be applied to the government too. The Modigliani-Miller Theorem's first proposition states that the value of an unlevered firm is equal to the value of a levered firm, which simply means that the value of any company is equal to the sum of its equity and debt. Moreover, it states that the value of a company is equal to the value of assets the company holds. Thus, by rearranging this formula and applying them to appropriate variables, it is, in theory, possible to apply to the government. This paper is going to assume the government's assets to be tax income, equity to be government spending, and debt to be government debt payment. The reason for these substitutions is because assets are things that produce cash inflows for the owner, thus, they can be treated similarly as the tax revenue. The expenses on equity are usually dividend payouts, which can be treated similarly to government spending because both of these are payments from the asset owners to the shareholders/taxpayers. Lastly, the company debt and government debt act very similarly, thus, this substitution is appropriate 
 
-The policies the US government implements have always had great impacts on the US economy especially during economic shocks. In the past when the Great Recession occurred in 2007 to 2008, the government reacted with a $787 billion spending to stimulate the economy [@GR]. During COVID-19 pandemic and on-going war between Russia and Ukraine, the US government has managed its spending and debt to recover and maintain the economy. Due to these fluctuations in the economy, both consumers and businesses often lose confidence in spending and investing. Thus, the aim of the paper is to investigate whether historical data of the US economy follows the Modigliani-Miller Theorem and potentially use the theorem to estimate the future US economy. The results from this paper can help any investors and companies to make better decisions about their investment. 
+The policies the US government implements have always had great impacts on the US economy, especially during economic shocks. In the past when the Great Recession occurred from 2007 to 2008, the government reacted with $787 billion in spending to stimulate the economy [@GR]. During the COVID-19 pandemic and ongoing war between Russia and Ukraine, the US government managed its spending and debt to recover and maintain the economy. Due to these fluctuations in the economy, both consumers and businesses often lose confidence in spending and investing. Thus, the aim of the paper is to investigate whether historical data on the US economy follows the Modigliani-Miller Theorem and potentially uses the theorem to estimate the future US economy. The results from this paper can help investors and companies to make better decisions about their investments. 
+
+The data was obtained from The World Bank (@TWB) and The White House (@TWH), which are both extremely credible since the data are directly provided by the US government. The analysis proceeds through some modifications to the original model to more accurately estimate the value of the country and the results are shown using organized tables and histograms. As a result of the investigation, it was discovered that the US government invests a significant amount of its revenue surplus on wealth funds, thus, a huge part of its revenue comes from returns on investments along with tax revenues and debt issuance. Therefore, it is difficult for the investors and companies in the US to improve their decision-making using the Modigliani-Miller Theorem, but the paper shines a possibility for the application of the theorem to other countries that do not have any wealth funds. A further investigation of this topic in other countries may potentially benefit investors and companies to make foreign investments to hedge risks and make more profit.
 
 The remainder of this paper is: Section \@ref(data) introduces the data and visualizes them using tables and graphs. Section \@ref(model) explains the model used in this paper and how it is derived. Section \@ref(results) explains the results of analysis. Section \@ref(discussion) describes strength and limitations of the data and discusses possible further investigations to improve the analysis. Section \@ref(conclusion) summarizes the analysis and states the conclusion. 
 
 # Data
+```{r loading, include = FALSE}
+#Load in the data sets
+Interest <- read_csv(here::here("inputs/Debt Interests.csv"))
+Tax <- read_csv(here::here("inputs/Tax Revenue.csv"))
+GDP <- read_csv(here::here("inputs/GDP.csv"))
+Spending <- read_csv(here::here("inputs/Government Spending.csv"))
+Debt <- read_csv(here::here("inputs/Government Debt.csv"))
+SSC <- read_csv(here::here("inputs/Social Security Contributions.csv"))
+```
+
+```{r cleaning, include = FALSE}
+#extracting data from 2000 to 2016 and cleaning the data sets
+Interest <- data.frame(Interest)
+Interest <- subset(Interest, select = c(45:61))
+Interest <- Interest[c(256), ]
+Interest <- as.data.frame(t(Interest))
+colnames(Interest) <- c('Value')
+Interest <- 
+  Interest |> 
+  mutate(Year = c('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'))
+Interest <- Interest[, c(2, 1)]
+Interest <- 
+  Interest |>
+  mutate(Value = Value / 1000000000)
+
+Tax <- subset(Tax, select = c(45:61))
+Tax <- Tax[c(256), ]
+Tax <- as.data.frame(t(Tax))
+colnames(Tax) <- c('Value')
+Tax <- 
+  Tax |> 
+  mutate(Year = c('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'))
+Tax <- Tax[, c(2, 1)]
+Tax <- as.data.frame(Tax)
+Tax <- 
+  Tax |>
+  mutate(Value = Value / 1000000000)
+
+GDP <- subset(GDP, select = c(45:61))
+GDP <- GDP[c(256), ]
+GDP <- as.data.frame(t(GDP))
+colnames(GDP) <- c('Value')
+GDP <- 
+  GDP |> 
+  mutate(Year = c('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'))
+GDP <- GDP[, c(2, 1)]
+GDP <- 
+  GDP |>
+  mutate(Value = Value / 1000000000)
+
+Spending <- subset(Spending, select = c(1, 2))
+Spending <- Spending[c(57:73), ]
+colnames(Spending) <- c('Year', 'Value')
+Spending$Value <- as.numeric(gsub(",", "", Spending$Value))
+
+Debt <- data.frame(Debt)
+Debt <- subset(Debt, select = c(45:61))
+Debt <- Debt[c(256), ]
+Debt <- as.data.frame(t(Debt))
+colnames(Debt) <- c('Value')
+Debt <- 
+  Debt |> 
+  mutate(Year = c('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'))
+Debt <- Debt[, c(2, 1)]
+Debt <- 
+  Debt |>
+  mutate(Value = Value / 1000000000)
+
+SSC <- data.frame(SSC)
+SSC <- subset(SSC, select = c(45:61))
+SSC <- SSC[c(256), ]
+SSC <- as.data.frame(t(SSC))
+colnames(SSC) <- c('Value')
+SSC <- 
+  SSC |> 
+  mutate(Year = c('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'))
+SSC <- SSC[, c(2, 1)]
+SSC <- 
+  SSC |>
+  mutate(Value = Value / 1000000000)
+
+Tax <- merge(Tax, SSC, by = "Year")
+Tax <- 
+  Tax |>
+  mutate(Value = Value.x + Value.y)
+Tax <- 
+  Tax |>
+  select(Year, Value)
+```
+This paper is going to focus on the data about the financial parts of the US government, acquired from The World Bank(@TWB) and The White House(@TWH). It will be using a statistical programming language, `R` [@citeR], for analysis. The main packages used in this analysis are `tidyverse` [@tidyverse], `knitr` (@knitr) and `dplyr` (@dplyr). The tidyverse and dplyr packages are used to manipulate the data set and graphing, and knitr package helps to produce organized tables. Other packages such as `bookdown` (@bookdown) and `kableExtra` (@kableExtra) are supporting packages to enhance the quality of visualization and organization of the paper. The Modigliani-Miller Theorem applied to the US government considers three main variables, tax revenue, government spending and debt interest payment. The data are obtained from The World Bank (@TWB) and The White House (@TWH). 
+The date on which the collection of data began varied depending on the variable. Hence, I decided to focus on the data starting in the year 2000 up until 2016 which had data for all the variables required for the analysis. Moreover, the year 2000 is the appropriate first year for this analysis because of the influence of the dotcom bubble in the late 1990s (@Dotcom) and the technological advancement of AI to the second generation in the late 1980s (@AI). The dotcom bubble is a rapid increase in the stock equity value of technology companies in the US due to a high volume of investments in internet-based companies. The second generation in AI is when the expert system was first built which allowed computers to analyze and make decisions the way human experts would using complex knowledge on the subject and the if-then rule. These two innovations in technology boosted the US economy in the late 1990s, and the year 2000 is around the time when the whole world including the US citizens started adjusting to the technology boom, while the investors and people in the technology industry experienced a head start. The US economy shows steady growth with its leading technology companies such as Google, Amazon, Meta and Apple (@GAFA). The US economy is expected to continue its growth, especially in the technology industry alongside further AI innovation. Thus, it is beneficial to analyze the recent trend, years after the technological boom to make predictions about the economy in the future. 
+
+The main variables to focus on in this paper are tax revenue, government spending and debt interest payments. To ensure that the analysis is accurate, it is important to be coherent with how the values in each variable are collected and calculated. The unit to denote the values of all the variables are in current USD. The current USD is the nominal term, which is the value of the dollar for each particular year (@current). Current USD is the most appropriate measurement to be used for this paper because the comparison of the cash inflow and outflow is done by each year. There is no comparison made between different years, thus, using the nominal terms provides the most accurate result when comparing different variables. 
+
+To further explain how the data was collected, the tax revenue obtained from The World Bank consists of all transfers to the central government except for transfers such as fines, penalties and most social security contributions. However, the social security contribution is a big component of tax income for the US government. Thus, I have added the social security contributions data obtained also from The World Bank to the tax revenue to perform a more accurate analysis. Also, some transfers are collected due to errors and the refunds are subtracted from the revenue. The GDP is calculated as the sum of the value of all final goods plus product taxes and minus any subsidies. It does not account for any depletion, depreciation or degradation. The interest payments include the payment on government debt which consists of bonds, loans and other instruments. Government spending is the total government expenditure on facilities such as education, infrastructure and so on. To simplify the visualization of tables and graphs, all the values will be expressed in billions of nominal USD. 
+
+```{r gdpgraph, echo=FALSE, fig.cap="The GDP of the US from 2000 to 2016 (In Billions)."}
+#show a brief summary of the US economy by the GDP histogram
+GDP |>
+  ggplot(aes(x = Year, y = Value)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  theme_minimal() + 
+  labs(x = "Year", y = "GDP", caption = "The World Bank")
+```
+The figure\@ref(fig:gdpgraph) provides an insight into how the US economy behaved from 2000 to 2016. The US economy has been growing steadily from 2000 to 2016 with just a one-time drop in 2009 due to the effect of the Great Recession that occurred in 2007-2008 (@GR). The growth of the US economy has been supported hugely by its technology industry. This is represented by an ETF called S&P 500 which consists of the US's top 500 companies. The share of information technology covers the highest proportion of this ETF standing at 28% (@ETF). This sector is still expected to continue its growth but it is often hugely influenced by fiscal and monetary policies. An increase in funds rates by the Federal Reserve often leads to drops in stock prices of companies in many industries in the US, thus, impacting the GDP as well. It is important to observe the movement of the US government and the Federal Reserve for investors to anticipate the movement of the market, thus, the Modigliani-Miller Theorem may become an extremely useful tool for investors. 
+
+```{r merging, include = FALSE}
+#merge data sets to create a data frame for the table showing the three main variables
+Table <- merge(Tax, Spending, by = "Year")
+Table <- merge(Table, Interest, by = "Year")
+#rename the columns
+colnames(Table) <- c("Year", "Tax Revenue", "Gov't Spending", "Interest Payments")
+```
+The ref(table1) shows the three main variables, tax revenue, government spending and interest payments from the year 2000 to 2016. The table is created by combining multiple data sets. The function used to combine them is `merge` which allows combining two data sets with a common variable, which in this case was the year. The final data set is a combination of 3 data sets, tax revenue, interest payment and government spending. Before the combining process, every data set required some cleaning process as the original data set contained information from every country instead of just the US. 
+```{r Table, echo = FALSE}
+#Show the three main variables using a simple table
+Table |>
+  select(Year, `Tax Revenue`, `Interest Payments`, `Gov't Spending`) |>
+  slice(1:17) |>
+  kable(
+    caption = "The Finance of the US Government from 2000 to 2016 (In Billions)", 
+    row.names = FALSE, 
+    digits = 1,
+    booktabs = TRUE, 
+    linesep = ""
+  )
+```
+By looking at the (ref table 1), it seems like the government expends almost 10 to 15 times more on the government spending compared to the interest payments. Also, it is already noticeable that the government spending exceeds the tax revenue every year starting with about 1 trillion USD in 2000 to over 2.5 trillion USD in 2016. The rate of increase in the tax revenue is much slower than that of government spending. By simply looking at the values in the (ref table 1), it is obvious that the simple Modigliani-Miller Theorem does not reflect the behaviour of the financial sector of the US government. Thus, it suggests the need for further consideration of other factors such as the issuance of new government bonds to explain the budget deficit. 
 
 # Model
+The Modigliani-Miller Theorem is a financial economics theorem which focuses on the value of a company calculated by all the future cash flows. The original formula to describe the cash flows for a company is very simple as follows: 
+$$
+V^A=E+D
+$$
+where $V^A$ represents the asset value of the company, $E$ represents the equity and $D$ represents the debt. The asset is something that generates money for the company, and thus, acts as a source of cash inflow, while the company needs to make payments for both equity shareholders and debt holders which act as cash outflow. This can be applied to the government as follows:
+$$
+PV(T) = PV(G) + PV(D)
+$$
+where $PV(T)$ represents the present value of taxes, $PV(G)$ represents the present value of government spending and $PV(D)$ represents the present value of the debt interest payments. This is the simplest model representing all the cash flows of the government. However, in reality, there are many other factors contributing to the cash flows of the US government. Thus, the additional variable to consider in this paper is the change in debt. The government can quickly finance their spending by issuing more government bonds which add up to the amount of government debt since the bonds are liabilities. Thus, the rest of the paper is going to investigate the cash flows of the US government using the following new form of the Modigliani-Miller Theorem formula:
+$$
+PV(T) + PV(C) = PV(G) + PV(D)
+$$
+where $PV(C)$ represents the present value of the increase in cash funded by the issuance of new government bonds. This can be calculated by the change in the amount of government debt each year. 
 
 # Results
+```{r Modigliani-Miller, echo = FALSE}
+#create the data frame and a column which shows the total cash outflow 
+RHS <- merge(Spending, Interest, by = "Year")
+colnames(RHS) <- c("Year", "Spending", "Interest")
+RHS <-
+  RHS |> 
+  mutate(Outflow = Spending + Interest)
+RHS <- RHS[, c(1, 4)]
+
+#merge data frames and create a column which shows the budget deficit to show the MM theorem using numbers
+MM <- merge(Tax, RHS, by = "Year")
+colnames(MM) <- c("Year", "Inflow", "Outflow")
+MM <- 
+  MM |>
+  mutate(Deficit = Outflow - Inflow)
+```
+
+```{r MM table, echo = FALSE}
+#Brief summary of the MM theorem shown in a table
+MM |>
+   select(Year, Inflow, Outflow, Deficit) |>
+  slice(1:17) |>
+  kable(
+    caption = "The Cash Flows and the Budget Deficit of the US government from 2000 to 2016 (In Billions)", 
+    col.names = c("Year", "Inflow", "Outflow", "Budget Deficit"),
+    row.names = FALSE, 
+    digits = 1,
+    booktabs = TRUE, 
+    linesep = ""
+  )
+```
+The (ref table 2) shows the modified version of the (ref table 1). The budget deficit column shows the annual deficit when the simple Modigliani-Miller Theorem is applied to the financial behaviour of the US government. The deficit amount is extremely big every year suggesting that there are other factors contributing to the cash inflow. The most common method a government creates cash inflows is by issuing more government bonds. 
+```{r Debt graph, echo = FALSE}
+#showing increasing amount of debt indicating more issuance of bonds every year
+Debt |> 
+  ggplot(aes(x = Year, y = Value)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  theme_minimal() + 
+  labs(x = "Year", y = "Amount in Dollars", title = "Figure 4: the US Government Debt from 2000 to 2016", caption = "The World Bank") + scale_x_discrete(guide=guide_axis(n.dodge=2))
+```
+The (ref the figure) displays the increasing amount of government debt almost every year. The government debt increases with time implying that the issuance of new government bonds is used to finance the government expenditure every year. The effects of this financing is shown below. 
+
+```{r MM edit, include = FALSE}
+#editing the MM data frame suitable for graph representation
+MM <-
+  MM |>
+  select(Year, Inflow, Outflow, `Deficit`) |>
+  gather(`Cash Flow`, Value, 2:4)
+```
+
+```{r changes in Debt, include = FALSE}
+#creating a column for the debt increase
+Debt <- 
+  Debt |>
+  mutate(Debt_Increase = c(0, diff(Value)))
+```
+
+```{r modify, include = FALSE}
+#merging data frames and creating a column for the total inflow including the debt increase
+LHS <- merge(Tax, Debt, by = "Year")
+colnames(LHS) <- c("Year", "Tax Revenue", "Debt", "Debt_Increase")
+LHS <- 
+  LHS |>
+  mutate(Inflow = `Tax Revenue` + Debt_Increase)
+
+#merging the data frames to compare total cash inflow and outflow
+MM2 <- merge(LHS, RHS, by = "Year")
+MM2 <- 
+  MM2 |>
+  select(Year, Inflow, Outflow) |>
+  mutate(Deficit = Outflow - Inflow) |>
+  gather(`Cash Flow`, Value, 2:4)
+```
+
+```{r MM2, echo = FALSE}
+#two MM graphs to compare the impact of adding increase in debt to the model 
+MM |> 
+  ggplot(aes(x = Year, y = Value, group = `Cash Flow`, fill = `Cash Flow`)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  theme_minimal() + 
+  labs(x = "Year", y = "Amount in USD", title = "Figure 5: The representation of the Modified Modigliani-Miller Theorem from 2000 to 2016 (In Billions)", caption = "The World Bank", fill = "Cash Flows") + scale_x_discrete(guide=guide_axis(n.dodge=2))
+MM2 |> 
+  ggplot(aes(x = Year, y = Value, group = `Cash Flow`, fill = `Cash Flow`)) +
+  geom_col(position = "dodge", alpha = 0.8) +
+  theme_minimal() + 
+  labs(x = "Year", y = "Amount in USD", title = "Figure 5: The representation of the Modified Modigliani-Miller Theorem from 2000 to 2016 (In Billions)", caption = "The World Bank", fill = "Cash Flows") + scale_x_discrete(guide=guide_axis(n.dodge=2))
+```
+As it can be observed from the (ref the graph), adding the increase in debt did contribute to decreasing the gap between the cash inflows and outflows resulting in less deficit. However, there is still a significant deficit almost every year between 2000 to 2016. Thus, the Modigliani-Miller Theorem, which is one of the simplest frameworks to calculate the value of total assets, requires further investigation to determine if it can be applied to the US government. Therefore, it is difficult to predict the effects of fiscal and monetary policies on the US economy by using the simple Modigliani-Miller framework. 
 
 # Discussion
+Before discussing any potential reasons why the Modigliani-Miller Theorem cannot be applied to the US economy, it is important to discuss the accuracy of the analysis. Firstly, the two sources of data, The World Bank and The White House, are both credible sources because the data are directly provided by the US government. Moreover, the measurement used for all the values is in current USD, thus, there should be no errors in the measurement. Therefore, the inconsistency with the Modigliani-Miller Theorem comes from some factors other than the accuracy of the investigation. 
 
-## First discussion point
+There are various potential reasons why the Modigliani-Miller Theorem cannot be applied to the US economy. One of the reasons is because of its assumptions. The simplest Modigliani-Miller Theorem leaves out several relevant factors such as transaction costs. The theorem applies to individual companies because the factors which were left out were still negligible when calculating the asset value of a company. However, the government deals with a much bigger amount of money compared to individual companies. Thus, the sum of neglected factors becomes big enough to cause a problem with the Modigliani-Miller Theorem. The transaction costs of Billions of dollars would become significantly big to cause the difference in the cash inflows and outflows. 
 
-## Second discussion point
+Another factor to consider is the wealth funds. Although the US does not have a federal sovereign wealth fund, some states have their sovereign wealth funds to finance the expenditures thereby being able to have low or no income taxes. The investment in the sovereign wealth fund is financed by the budget surplus and it generates consistent revenue. The individual states have been investing their revenue surplus to invest in sovereign wealth funds. The value of assets under management has accumulated to over 11,000 billion USD in April 2022. The return on the sovereign wealth fund has been fluctuating between 1% to 30% in the last few years. As the investment amount on such funds is significant and so are the annual returns, it suggests that much of the budget deficit from our simple Modigliani-Miller Theorem is financed by the returns of these funds. 
 
-## Third discussion point
+The reason why I decided to not include the returns of these funds to the Modigliani-Miller Theorem model is due to the purpose and the implications of this paper. The aim of the paper is to investigate whether the Modigliani-Miller Theorem can be used to represent the financial sector of the US government so that the future effects of fiscal and monetary policies can be predicted by firms and investors in the early stages to hedge risks or make more profit from the investment. Since the wealth funds are also hugely affected by the policies, if the returns from the wealth fund are included in the model, the results from this paper will be not beneficial to any firms and investors to hedge risks or make a profit. 
 
-## Weaknesses and next steps
+The US government likely finances its expenditures mostly from both the tax revenues and returns from the wealth funds. Thus, if a further investigation confirms this result, it implies that the Modigliani-Miller Theorem can also be applied to the government as long as most of their sources of income are considered. It also suggests that the Modigliani-Miller Theorem may be used in the governments of countries which invest in no wealth funds at all. Therefore, the firms and investors may be able to predict the effects of policies using the Modigliani-Miller Theorem limited to countries with no investment in wealth funds. 
 
 # Conclusion 
+In conclusion, when the simple Modigliani-Miller Theorem is applied to the financial sector of the US government, it fails to accurately represent all of its cash flows because of its significant investment in wealth funds. Although the result indicates that the Modigliani-Miller Theorem may not be a beneficial tool for firms and investors in the US, it suggests a possibility of optimal usage in other countries which does not invest in wealth funds. Therefore, a further investigation of the theorem taking into account the returns from the wealth funds on the US government and application to other countries potentially provide results that the Modigliani-Miller Theorem is a useful tool to predict the future changes due to the effects of fiscal and monetary policies. 
+
 
 \newpage
 
 
 # References
-
-
